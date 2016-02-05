@@ -34,14 +34,22 @@ module.exports = class Core {
     let name = slug(module.name);
     let $ = this.domModules[name];
 
-    if ($) module.$ = $;
+    if ($) {
+      this.log('module', name, 'inject dom-module');
+      module.$ = $;
+    }
+
     this.modules[name] = module;
 
-    log({ id: this.id }, '[module]', 'loaded', name);
+    this.log('module', name, 'loaded');
   }
 
   detect(type, modules) {
-    log(`[${this.id}]`, `[${type}]`, `${modules.length} module${modules.length > 1 ? 's' : ''} detected`);
+    log({ id:this.id, name: type }, `${modules.length} module${modules.length > 1 ? 's' : ''} detected`);
+  }
+
+  log(type, name, msg) {
+    log({ id: this.id, name: `${type}] [${name}` }, msg);
   }
 
   loadModules(...modules) {
@@ -54,8 +62,10 @@ module.exports = class Core {
   loadDomModules(...modules) {
     this.detect('dom-module', modules);
     modules.forEach(domModule => {
-      this.domModules[domModule.className] = domModule;
-      log(`[${this.id}]`, '[dom-module]', `loaded ${domModule.className}`);
+      let name = domModule.className;
+
+      this.domModules[name] = domModule;
+      this.log('dom-module', name, 'loaded');
     });
   }
 };

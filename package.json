@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/sledjs/core#readme",
   "dependencies": {
-    "@sled/log": "^0.0.2",
+    "@sled/log": "^0.0.3",
     "to-slug-case": "^1.0.0"
   }
 }
