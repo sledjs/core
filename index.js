@@ -36,21 +36,26 @@ module.exports = class Core {
 
     if ($) module.$ = $;
     this.modules[name] = module;
-    log(`[${this.id}]`, '[modules]', 'loaded', name);
+
+    log({ id: this.id }, '[module]', 'loaded', name);
+  }
+
+  detect(type, modules) {
+    log(`[${this.id}]`, `[${type}]`, `${modules.length} module${modules.length > 1 ? 's' : ''} detected`);
   }
 
   loadModules(...modules) {
-    if (!modules.length)
-      log(`[${this.id}]`, '[modules]', '0 modules to load');
+    this.detect('module', modules);
+    modules.forEach(this.bootstrapModule.bind(this));
 
-    else modules.forEach(this.bootstrapModule);
     return new Promise(res => res(this));
   }
 
   loadDomModules(...modules) {
+    this.detect('dom-module', modules);
     modules.forEach(domModule => {
       this.domModules[domModule.className] = domModule;
-      log(`[${this.id}]`, '[modules-dom]', `loaded ${domModule.className}`);
+      log(`[${this.id}]`, '[dom-module]', `loaded ${domModule.className}`);
     });
   }
 };
