@@ -37,6 +37,9 @@ module.exports = class Core {
     if ($) {
       this.log('module', name, 'inject dom-module');
       module.$ = $;
+    } else if (module.peer === '$') {
+      //TODO #3
+      throw new Error(`missing dom-module ${name}`);
     }
 
     this.modules[name] = module;
