@@ -4,38 +4,29 @@ let slug = require('to-slug-case');
 module.exports = class Core {
   constructor($slider, ...modules) {
     this.$ = $slider;
-    this.domModules = {};
+    this.id = this.$.id || 'slider';
     this.modules = {};
-    this.id = $slider.id || 'slider';
+    this.domModules = {};
 
     log({ id: this.id }, `created`);
 
-    this.loadModules(...modules);
     this.loadDomModules(...this.$.children);
+    this.loadModules(...modules);
   }
 
-  getModule(name, type) {
-    let module;
-
-    this.module(name, (er, bundle) =>
-      module = bundle[type == '$' ? type : '_']);
-
-    return module;
+  module(name) {
+    return module = this.modules[name];
   }
 
-  module(name, cb) {
-    let bundle;
+  load(name, cb) {
+    let module = this.module(slug(name));
     let err;
 
-    name = slug(name);
-
-    if (this.modules[name])
-      bundle = Object.assign(this.modules[name], { $: this.domModules[name] || null });
-    else
+    if (!module)
       err = new Error('missing module', name);
 
-    cb && cb(err, bundle);
-    return new Promise((res, rej) => bundle ? res(bundle) : rej(err));
+    cb && cb(err, module);
+    return new Promise((res, rej) => module ? res(module) : rej(err));
   }
 
   bootstrapModule(Module) {
