@@ -1,6 +1,6 @@
 {
   "name": "core",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/sledjs/core#readme",
   "dependencies": {
-    "@sled/log": "^0.0.2",
+    "@sled/log": "^0.0.3",
     "to-slug-case": "^1.0.0"
   }
 }

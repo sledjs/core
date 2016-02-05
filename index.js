@@ -4,60 +4,68 @@ let slug = require('to-slug-case');
 module.exports = class Core {
   constructor($slider, ...modules) {
     this.$ = $slider;
-    this.domModules = {};
+    this.id = this.$.id || 'slider';
     this.modules = {};
-    this.id = $slider.id || 'slider';
+    this.domModules = {};
 
     log({ id: this.id }, `created`);
 
-    this.loadModules(...modules);
     this.loadDomModules(...this.$.children);
+    this.loadModules(...modules);
   }
 
-  getModule(name, type) {
-    let module;
-
-    this.module(name, (er, bundle) =>
-      module = bundle[type == '$' ? type : '_']);
-
-    return module;
+  module(name) {
+    return module = this.modules[name];
   }
 
-  module(name, cb) {
-    let bundle;
+  load(name, cb) {
+    let module = this.module(slug(name));
     let err;
 
-    name = slug(name);
-
-    if (this.modules[name])
-      bundle = Object.assign(this.modules[name], { $: this.domModules[name] || null });
-    else
+    if (!module)
       err = new Error('missing module', name);
 
-    cb && cb(err, bundle);
-    return new Promise((res, rej) => bundle ? res(bundle) : rej(err));
+    cb && cb(err, module);
+    return new Promise((res, rej) => module ? res(module) : rej(err));
   }
 
   bootstrapModule(Module) {
     let module = new Module(this);
     let name = slug(module.name);
+    let $ = this.domModules[name];
+
+    if ($) {
+      this.log('module', name, 'inject dom-module');
+      module.$ = $;
+    }
 
     this.modules[name] = module;
-    log(`[${this.id}]`, '[modules]', 'loaded', name);
+
+    this.log('module', name, 'loaded');
+  }
+
+  detect(type, modules) {
+    log({ id:this.id, name: type }, `${modules.length} module${modules.length > 1 ? 's' : ''} detected`);
+  }
+
+  log(type, name, msg) {
+    log({ id: this.id, name: `${type}] [${name}` }, msg);
   }
 
   loadModules(...modules) {
-    if (!modules.length)
-      log(`[${this.id}]`, '[modules]', '0 modules to load');
+    this.detect('module', modules);
+    modules.forEach(this.bootstrapModule.bind(this));
 
-    else modules.forEach(this.bootstrapModule);
     return new Promise(res => res(this));
   }
 
   loadDomModules(...modules) {
+    this.detect('dom-module', modules);
     modules.forEach(domModule => {
-      this.domModules[domModule.className] = domModule;
-      log(`[${this.id}]`, '[modules-dom]', `loaded ${domModule.className}`);
+      let name = domModule.className;
+
+      this.domModules[name] = domModule;
+      this.log('dom-module', name, 'loaded');
     });
   }
 };
