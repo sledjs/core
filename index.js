@@ -38,15 +38,19 @@ module.exports = class Core {
     return new Promise((res, rej) => bundle ? res(bundle) : rej(err));
   }
 
+  bootstrapModule(Module) {
+    let module = new Module(this);
+    let name = slug(module.name);
+
+    this.modules[name] = module;
+    log(`[${this.id}]`, '[modules]', 'loaded', name);
+  }
+
   loadModules(...modules) {
     if (!modules.length)
       log(`[${this.id}]`, '[modules]', '0 modules to load');
-    else modules.forEach(Module => {
-      let name = slug(Module.name);
-      log(`[${this.id}]`, '[modules]', 'loaded', name);
-      this.modules[name] = new Module(this);
-    });
 
+    else modules.forEach(this.bootstrapModule);
     return new Promise(res => res(this));
   }
 
