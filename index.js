@@ -41,7 +41,9 @@ module.exports = class Core {
   bootstrapModule(Module) {
     let module = new Module(this);
     let name = slug(module.name);
+    let $ = this.domModules[name];
 
+    if ($) module.$ = $;
     this.modules[name] = module;
     log(`[${this.id}]`, '[modules]', 'loaded', name);
   }
