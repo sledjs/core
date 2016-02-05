@@ -1,5 +1,5 @@
 {
-  "name": "core",
+  "name": "@sled/core",
   "version": "1.2.1",
   "description": "",
   "main": "index.js",
