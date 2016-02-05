@@ -2,13 +2,15 @@ let log = require('@sled/log');
 let slug = require('to-slug-case');
 
 module.exports = class Core {
-  constructor($slider) {
+  constructor($slider, ...modules) {
     this.$ = $slider;
     this.domModules = {};
     this.modules = {};
     this.id = $slider.id || 'slider';
 
     log({ id: this.id }, `created`);
+
+    this.loadModules(...modules);
     this.loadDomModules(...this.$.children);
   }
 
