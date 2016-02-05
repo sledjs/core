@@ -15,7 +15,7 @@ module.exports = class Core {
   }
 
   module(name) {
-    return module = this.modules[name];
+    return this.modules[name];
   }
 
   load(name, cb) {
@@ -44,14 +44,6 @@ module.exports = class Core {
     this.log('module', name, 'loaded');
   }
 
-  detect(type, modules) {
-    log({ id:this.id, name: type }, `${modules.length} module${modules.length > 1 ? 's' : ''} detected`);
-  }
-
-  log(type, name, msg) {
-    log({ id: this.id, name: `${type}] [${name}` }, msg);
-  }
-
   loadModules(...modules) {
     this.detect('module', modules);
     modules.forEach(this.bootstrapModule.bind(this));
@@ -67,5 +59,13 @@ module.exports = class Core {
       this.domModules[name] = domModule;
       this.log('dom-module', name, 'loaded');
     });
+  }
+
+  detect(type, modules) {
+    log({ id:this.id, name: type }, `${modules.length} module${modules.length > 1 ? 's' : ''} detected`);
+  }
+
+  log(type, name, msg) {
+    log({ id: this.id, name: `${type}] [${name}` }, msg);
   }
 };
