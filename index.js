@@ -2,11 +2,11 @@ import log from '@sled/log';
 import slug from 'to-slug-case';
 
 class Core {
-  constructor($slider, ...modules) {
+    constructor($slider, ...modules) {
     this.$ = $slider;
-    this.id = this.$.id || 'slider';
     this.modules = {};
     this.domModules = {};
+    this.id = this.$.id || 'core';
 
     log({ id: this.id }, `created`);
 
