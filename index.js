@@ -30,20 +30,19 @@ module.exports = class Core {
   }
 
   bootstrapModule(Module) {
-    let module = new Module(this);
-    let name = slug(module.name);
+    let name = Module.name;
     let $ = this.domModules[name];
+    let module = new Module.class(this);
 
     if ($) {
-      this.log('module', name, 'inject dom-module');
       module.$ = $;
-    } else if (module.peer === '$') {
+      this.log('module', name, 'inject dom-module');
+    } else if (Module.peer === '$') {
       //TODO #3
       throw new Error(`missing dom-module ${name}`);
     }
 
     this.modules[name] = module;
-
     module.init && module.init.call(module, this);
 
     this.log('module', name, 'loaded');
