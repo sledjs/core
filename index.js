@@ -1,7 +1,7 @@
-let log = require('@sled/log');
-let slug = require('to-slug-case');
+import log from '@sled/log';
+import slug from 'to-slug-case';
 
-module.exports = class Core {
+class Core {
   constructor($slider, ...modules) {
     this.$ = $slider;
     this.id = this.$.id || 'slider';
@@ -73,3 +73,5 @@ module.exports = class Core {
     log({ id: this.id, name: `${type}] [${name}` }, msg);
   }
 };
+
+export default Core;
