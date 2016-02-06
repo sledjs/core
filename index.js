@@ -57,7 +57,7 @@ module.exports = class Core {
   loadDomModules(...modules) {
     this.detect('dom-module', modules);
     modules.forEach(domModule => {
-      let name = domModule.className;
+      let name = domModule.classList[0];
 
       this.domModules[name] = domModule;
       this.log('dom-module', name, 'loaded');
