@@ -44,6 +44,8 @@ module.exports = class Core {
 
     this.modules[name] = module;
 
+    module.init && module.init.call(module, this);
+
     this.log('module', name, 'loaded');
   }
 
