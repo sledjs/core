@@ -3,7 +3,9 @@ import slug from 'to-slug-case';
 
 class Core {
     constructor($slider, ...modules) {
-    this.$ = $slider;
+    this.$ = typeof $slider == 'object' ? $slider
+      : document.querySelector($slider);
+
     this.modules = {};
     this.domModules = {};
     this.id = this.$.id || 'core';
