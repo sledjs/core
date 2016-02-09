@@ -38,7 +38,13 @@ class Core {
 
     if ($) {
       module.$ = $;
+      if ($.children.length) {
+        module.$$ = $.children;
+        this.log('module', name, '$$');
+      }
+
       this.log('module', name, 'inject dom-module');
+
     } else if (Module.peer === '$') {
       //TODO #3
       throw new Error(`missing dom-module ${name}`);
