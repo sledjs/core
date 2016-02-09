@@ -1,3 +1,4 @@
+import './index.styl';
 import log from '@sled/log';
 import slug from 'to-slug-case';
 
