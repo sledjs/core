@@ -1,6 +1,5 @@
 import './index.styl';
 import log from '@sled/log';
-import slug from 'to-slug-case';
 
 class Core {
     constructor($slider, ...modules) {
@@ -22,7 +21,7 @@ class Core {
   }
 
   load(name, cb) {
-    let module = this.module(slug(name));
+    let module = this.module(name);
     let err;
 
     if (!module)
