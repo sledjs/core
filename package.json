@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/sledjs/core#readme",
   "dependencies": {
-    "@sled/log": "^0.0.3"
+    "@sled/log": "^0.0.3",
+    "flexstyl": "^1.0.1"
   }
 }
