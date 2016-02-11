@@ -51,15 +51,20 @@ class Core {
     }
 
     this.modules[name] = module;
-    module.init && module.init.call(module, this);
-
     this.log('module', name, 'loaded');
+
+    return module;
   }
 
   loadModules(...modules) {
     this.detect('module', modules);
-    modules.forEach(this.bootstrapModule.bind(this));
+    let init = modules
+      .map(::this.bootstrapModule)
+      .filter(module => module.init);
 
+    init.forEach(module => module.init(this));
+
+    log({ id:this.id, name: 'module' }, `${init.length} module${init.length > 1 ? 's' : ''} initiated`);
     return new Promise(res => res(this));
   }
 
